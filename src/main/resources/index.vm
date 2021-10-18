@@ -1,0 +1,12 @@
+From application: $model.time
+Message: $model.message
+
+#foreach($month in $months)
+    The month is: $month
+#end
+
+#foreach($employee in $employees)
+    Employee Name is : $employee.name
+    Employee Name is : $employee.address
+
+#end
