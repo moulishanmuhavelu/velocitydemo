@@ -1,0 +1,45 @@
+{
+  "verzekering": {
+    "risicodekking": {
+      "einddatumPremiebetaling": "2021-10-19T19:18:55",
+      "verzekerdeVolgnummer": 1,
+      "maanden": [
+                        {
+          "jaarMaand": 202109,
+          "variabelePremie": 32.56,
+          "vastePremie": 25.67,
+          "verzekerdBedrag": 54000.12
+        },                {
+          "jaarMaand": 202110,
+          "variabelePremie": 33.67,
+          "vastePremie": 36.77,
+          "verzekerdBedrag": 38000.28
+        },                {
+          "jaarMaand": 202111,
+          "variabelePremie": 34.78,
+          "vastePremie": 47.88,
+          "verzekerdBedrag": 87000.59
+        },                {
+          "jaarMaand": 202112,
+          "variabelePremie": 17.78,
+          "vastePremie": 123.88,
+          "verzekerdBedrag": 6678700.59
+        },                {
+          "jaarMaand": 202201,
+          "variabelePremie": 43.78,
+          "vastePremie": 567.88,
+          "verzekerdBedrag": 123700.59
+        },                {
+          "jaarMaand": 202202,
+          "variabelePremie": 237.78,
+          "vastePremie": 341.88,
+          "verzekerdBedrag": 45500.59
+        }              ]
+    },
+    "verzekerde": {
+      "medischAdviesNodig": true,
+      "volgnummer": 1
+    }
+  },
+  "foutmeldingen": []
+}

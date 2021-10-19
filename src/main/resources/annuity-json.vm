@@ -1,0 +1,25 @@
+{
+  "verzekering": {
+    "risicodekking": {
+      "einddatumPremiebetaling": "$annuityDate",
+      "verzekerdeVolgnummer": 1,
+      "maanden": [
+        #set ($rowCount = 0)
+        #foreach($annuity in $annuitees)
+        {
+          "jaarMaand": $annuity.yearMonth,
+          "variabelePremie": $annuity.variablePremium,
+          "vastePremie": $annuity.fixedPremium,
+          "verzekerdBedrag": $annuity.insuredAmount
+        }#if($rowCount < $annuitees.size() - 1),#end
+        #set ($rowCount = $rowCount + 1)
+        #end
+      ]
+    },
+    "verzekerde": {
+      "medischAdviesNodig": true,
+      "volgnummer": 1
+    }
+  },
+  "foutmeldingen": []
+}
