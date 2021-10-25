@@ -8,8 +8,12 @@
         #foreach($annuity in $annuitees)
         {
           "jaarMaand": $annuity.yearMonth,
+          #if($annuity.variablePremium)
           "variabelePremie": $annuity.variablePremium,
+          #end
+          #if($annuity.fixedPremium)
           "vastePremie": $annuity.fixedPremium,
+          #end
           "verzekerdBedrag": $annuity.insuredAmount
         }#if($rowCount < $annuitees.size() - 1),#end
         #set ($rowCount = $rowCount + 1)

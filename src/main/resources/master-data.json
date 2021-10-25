@@ -1,0 +1,38 @@
+[
+  {
+    "jaarMaand": "202110",
+    "variabelePremie": 8.12,
+    "vastePremie": 11.52,
+    "verzekerdBedrag": 164000.00
+  },
+  {
+    "jaarMaand": "202111",
+    "variabelePremie": 6.91,
+    "vastePremie": 10.48,
+    "verzekerdBedrag": 234000.00
+  },
+  {
+    "jaarMaand": "202112",
+    "variabelePremie": 6.93,
+    "vastePremie": 10.48,
+    "verzekerdBedrag": 233263.00
+  },
+  {
+    "jaarMaand": "202201",
+    "variabelePremie": 6.95,
+    "vastePremie": 10.48,
+    "verzekerdBedrag": 232523.00
+  },
+  {
+    "jaarMaand": "202202",
+    "variabelePremie": 6.98,
+    "vastePremie": 10.48,
+    "verzekerdBedrag": 231781.00
+  },
+  {
+    "jaarMaand": "202203",
+    "variabelePremie": 7.00,
+    "vastePremie": 10.48,
+    "verzekerdBedrag": 231037.00
+  }
+]

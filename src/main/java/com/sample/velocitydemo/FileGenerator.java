@@ -1,74 +1,91 @@
 package com.sample.velocitydemo;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import lombok.AllArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.stereotype.Service;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+@Service
+@AllArgsConstructor
 public class FileGenerator {
-
-    private static String inputPath = "src/main/resources/";
-    private static String templateFile = "annuity-json.vm";
-    private static String outputFileName = "output.json";
+    private final AppConfig appConfig;
 
     public void generateFile() {
         VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.init();
-
-        Template t = velocityEngine.getTemplate(inputPath + templateFile);
-
-        VelocityContext context = new VelocityContext();
-//        context.put("model", getModel());
-//        context.put("months", getMonths());
-//        context.put("employees", getEmployees());
-        context.put("annuitees", getAnnuitees());
-        context.put("annuityDate", getDate());
-        StringWriter writer = new StringWriter();
-        t.merge( context, writer );
-        writeToFile(inputPath + outputFileName, writer.toString());
+        Template template = velocityEngine.getTemplate(appConfig.getInputPath() + appConfig.getTemplateFile());
+        createFiles(template);
     }
 
-    private Map<String, Object> getModel() {
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("time", new Date());
-        model.put("message", "Hello Steve");
-        return model;
+    private void createFiles(Template t) {
+        List<AnnuityMasterData> annuityMasterDataList = getAnnuitiesMasterData();
+        appConfig.getFiles().keySet().iterator();
+
+        for (Map.Entry<String, Integer> entry : appConfig.getFiles().entrySet()) {
+            String fileName = entry.getKey();
+            int numberOfAnnuities = entry.getValue();
+            VelocityContext context = new VelocityContext();
+            context.put("annuitees", getAnnuitees(fileName, annuityMasterDataList));
+            context.put("annuityDate", getDate());
+            StringWriter writer = new StringWriter();
+            t.merge( context, writer );
+            writeToFile(appConfig.getOutputPath() + fileName + ".json", getPrettyPrintJson(writer.toString()));
+        }
+
     }
 
-    private List<String> getMonths() {
-        return List.of("January","February","March","April");
+    private List<Annuity> getAnnuitees(String fileName, List<AnnuityMasterData> annuityMasterDataList) {
+        List<Annuity> annuities = new ArrayList<>();
+        int start = (fileName.contains("partial")) ? 0 : 1;
+
+        for (int i = start; i < annuityMasterDataList.size(); i++ ) {
+            final AnnuityMasterData annuityMasterData = annuityMasterDataList.get(i);
+            Annuity annuity = new Annuity();
+            if (i < 1) {
+                annuity.setYearMonth(getYearMonth(0));
+            } else {
+                annuity.setYearMonth(getYearMonth(i));
+            }
+            annuity.setInsuredAmount(annuityMasterData.getVerzekerdBedrag());
+            if (fileName.contains("BD") || fileName.contains("LA")) {
+                annuity.setVariablePremium(annuityMasterData.getVariabelePremie());
+            }
+            if (fileName.contains("BD") || fileName.contains("ZR")) {
+                annuity.setFixedPremium(annuityMasterData.getVastePremie());
+            }
+            annuities.add(annuity);
+        }
+        return annuities;
     }
 
-    private List<Employee> getEmployees() {
-
-        List<Employee> employees = new ArrayList<>();
-        Employee employee = new Employee("Steve", "Robert street, 54716");
-        employees.add(employee);
-        employee = new Employee("Jacob", "Houter street, 36151");
-        employees.add(employee);
-
-        return employees;
-    }
-
-    private List<Annuity> getAnnuitees() {
-        return List.of(
-                new Annuity("202109", 32.56, 25.67, 54000.12),
-                new Annuity("202110", 33.67, 36.77, 38000.28),
-                new Annuity("202111", 34.78, 47.88, 87000.59),
-                new Annuity("202112", 17.78, 123.88, 6678700.59),
-                new Annuity("202201", 43.78, 567.88, 123700.59),
-                new Annuity("202202", 237.78, 341.88, 45500.59)
-        );
+    private String getYearMonth(int additionalMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        if (additionalMonth > 0) {
+            calendar.add(Calendar.MONTH, additionalMonth);
+        }
+        int month = calendar.get(Calendar.MONTH) + 1; // We should add 1 as the array starts from zero
+        String monthValue = (month < 10) ? ("0" + month) : (StringUtils.EMPTY + month);
+        return StringUtils.EMPTY + calendar.get(Calendar.YEAR) + monthValue;
     }
 
     private void writeToFile(String outputFilePath, String content) {
@@ -82,5 +99,27 @@ public class FileGenerator {
     private String getDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         return sdf.format(new Date());
+    }
+
+    private List<AnnuityMasterData> getAnnuitiesMasterData() {
+        try {
+            Gson gson = new Gson();
+            Reader reader = Files.newBufferedReader(Paths.get(appConfig.getInputPath() + appConfig.getMasterDataFile()));
+            List<AnnuityMasterData> annuities = new Gson().fromJson(reader, new TypeToken<List<AnnuityMasterData>>() {}.getType());
+            reader.close();
+            return annuities;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getPrettyPrintJson(String jsonString) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonParser jp = new JsonParser();
+        JsonElement je = jp.parse(jsonString);
+        return gson.toJson(je);
+//        return jsonString;
     }
 }
