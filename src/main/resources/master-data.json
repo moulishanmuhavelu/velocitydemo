@@ -34,5 +34,41 @@
     "variabelePremie": 7.00,
     "vastePremie": 10.48,
     "verzekerdBedrag": 231037.00
+  },
+  {
+    "jaarMaand": "202204",
+    "variabelePremie": 12.01,
+    "vastePremie": 11.58,
+    "verzekerdBedrag": 321077.00
+  },
+  {
+    "jaarMaand": "202205",
+    "variabelePremie": 13.02,
+    "vastePremie": 16.18,
+    "verzekerdBedrag": 421047.00
+  },
+  {
+    "jaarMaand": "202206",
+    "variabelePremie": 14.03,
+    "vastePremie": 11.38,
+    "verzekerdBedrag": 611037.00
+  },
+  {
+    "jaarMaand": "202207",
+    "variabelePremie": 42.04,
+    "vastePremie": 19.21,
+    "verzekerdBedrag": 961037.00
+  },
+  {
+    "jaarMaand": "202208",
+    "variabelePremie": 53.10,
+    "vastePremie": 62.18,
+    "verzekerdBedrag": 871037.00
+  },
+  {
+    "jaarMaand": "202209",
+    "variabelePremie": 47.10,
+    "vastePremie": 17.27,
+    "verzekerdBedrag": 741337.00
   }
 ]

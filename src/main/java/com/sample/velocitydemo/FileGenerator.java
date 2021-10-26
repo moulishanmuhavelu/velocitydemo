@@ -42,22 +42,21 @@ public class FileGenerator {
 
         for (Map.Entry<String, Integer> entry : appConfig.getFiles().entrySet()) {
             String fileName = entry.getKey();
-            int numberOfAnnuities = entry.getValue();
+            int numberOfAnnuitiesRequired = entry.getValue();
             VelocityContext context = new VelocityContext();
-            context.put("annuitees", getAnnuitees(fileName, annuityMasterDataList));
+            context.put("annuitees", getAnnuitees(fileName, annuityMasterDataList, numberOfAnnuitiesRequired));
             context.put("annuityDate", getDate());
             StringWriter writer = new StringWriter();
             t.merge( context, writer );
             writeToFile(appConfig.getOutputPath() + fileName + ".json", getPrettyPrintJson(writer.toString()));
         }
-
     }
 
-    private List<Annuity> getAnnuitees(String fileName, List<AnnuityMasterData> annuityMasterDataList) {
+    private List<Annuity> getAnnuitees(String fileName, List<AnnuityMasterData> annuityMasterDataList, int numberOfAnnuitiesRequired) {
         List<Annuity> annuities = new ArrayList<>();
-        int start = (fileName.contains("partial")) ? 0 : 1;
+        int start = (fileName.contains("artial")) ? 0 : 1;
 
-        for (int i = start; i < annuityMasterDataList.size(); i++ ) {
+        for (int i = start; (i < annuityMasterDataList.size() && numberOfAnnuitiesRequired > annuities.size()); i++ ) {
             final AnnuityMasterData annuityMasterData = annuityMasterDataList.get(i);
             Annuity annuity = new Annuity();
             if (i < 1) {
@@ -74,6 +73,7 @@ public class FileGenerator {
             }
             annuities.add(annuity);
         }
+
         return annuities;
     }
 

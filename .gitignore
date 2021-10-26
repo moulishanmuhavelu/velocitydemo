@@ -1,8 +1,8 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+!**/src/main/**
+!**/src/test/**
 
 ### STS ###
 .apt_generated
@@ -12,6 +12,20 @@ target/
 .settings
 .springBeans
 .sts4-cache
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
 
 ### IntelliJ IDEA ###
 .idea
@@ -26,11 +40,18 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
-.mvn
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+.mvn/
 mvnw
 mvnw.cmd
+
+#swagger files
+swagger.json
